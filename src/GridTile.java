@@ -1,10 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 public class GridTile extends JButton {
     private static final byte[][] SURROUNDINGS = new byte[][] {
             {-1,-1}, {-1, 0}, {-1, 1}, {0,-1}, {0,1}, {1,-1}, {1,0}, {1,1}};
+
+    private static final Map<Integer, Color> numberColorMap = Map.ofEntries(
+            entry(1, Color.BLUE),
+            entry(2, Color.GREEN),
+            entry(3, Color.RED),
+            entry(4, new Color(12, 12, 62)),
+            entry(5, new Color(79, 16, 16)),
+            entry(6, new Color(1,2,3)),
+            entry(7, new Color(1,2,3)),
+            entry(8, new Color(1,2,3))
+    );
 
     private int x, y;
     private boolean isAMine;
@@ -14,13 +28,14 @@ public class GridTile extends JButton {
 
     public GridTile(int pX, int pY, MineSweeperBoard parent) {
         super();
-        setForeground(Color.WHITE);
-        setBorderPainted(false);
         addActionListener(this::onClick);
         x = pX;
         y = pY;
         parentBoard = parent;
         setBorder(null);
+        setBackground((x+y)%2==0?Color.LIGHT_GRAY:Color.GRAY);
+        setBorderPainted(false);
+        //setFocusPainted(false);
     }
 
     public void setIsAMine(boolean v) {isAMine = v;}
@@ -39,7 +54,8 @@ public class GridTile extends JButton {
         if (isAMine) setText("*");
         else setText(""+((numberOfMinesAround>0)?numberOfMinesAround:""));
         isRevealed = true;
-        setEnabled(false);
+        setForeground(numberColorMap.get((int)numberOfMinesAround));
+        //setEnabled(false);
     }
 
     private void onClick(ActionEvent e) {
