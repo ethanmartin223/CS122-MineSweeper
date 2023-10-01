@@ -28,8 +28,9 @@ public class MineSweeperBoard extends JPanel {
         isFirstMove = true;
         for (int y = 0; y < gridSize; y++) {
             for (int x = 0; x < gridSize; x++) {
+                gridTiles[y][x].resetTile();
                 gridTiles[y][x].setIsAMine(100*Math.random()<=mineFrequency);
-                gridTiles[y][x].setEnabled(true);
+
             }
         }
     }
@@ -60,11 +61,7 @@ public class MineSweeperBoard extends JPanel {
 
     public void doGameOver() {
         JOptionPane.showMessageDialog(null, "Game Over");
-        for (int y = 0; y < gridSize; y++) {
-            for (int x = 0; x < gridSize; x++) {
-                gridTiles[y][x].setEnabled(false);
-            }
-        }
+        resetBoard(mineFrequency);
     }
 
 }
