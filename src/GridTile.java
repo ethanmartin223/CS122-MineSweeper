@@ -79,6 +79,10 @@ public class GridTile extends JButton {
         //setEnabled(false);
     }
 
+    private void onClick() {
+        onClick(null);
+    }
+
     private void onClick(ActionEvent e) {
         if (!isFlagged && parentBoard.isFirstMove()) {
             isAMine = false;
@@ -95,7 +99,7 @@ public class GridTile extends JButton {
                     GridTile tile = parentBoard.getGridTileAt(x + p[0], y + p[1]);
                     if (tile != null) {
                         if (tile.numberOfMinesAround == 0) {
-                            tile.onClick(e);
+                            tile.onClick();
                         } else tile.reveal();
                     }
                 }
@@ -108,12 +112,15 @@ public class GridTile extends JButton {
 
     private void onRightClick(MouseEvent e) {
         if (e.getButton()==MouseEvent.BUTTON3 && !isRevealed && !isFlagged) {
-            setForeground(Color.RED);
             isFlagged = true;
             setText("F");
+            setForeground(Color.BLACK);
+            setBackground(Color.YELLOW);
         } else if (e.getButton()==MouseEvent.BUTTON3 && isFlagged) {
             isFlagged = false;
+            setForeground(Color.BLACK);
             setText("");
+            setBackground((x+y)%2==0?Color.LIGHT_GRAY:Color.GRAY);
         }
     }
 }
