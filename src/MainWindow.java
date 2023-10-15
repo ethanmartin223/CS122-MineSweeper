@@ -4,19 +4,16 @@ import java.awt.*;
 public class MainWindow extends JFrame {
     public MainWindow() {
 
-        //win settings
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 800);
+        setSize(500, 500);
         setTitle("MineSweeper");
         setLocationRelativeTo(null);
-        setLayout(new GridLayout());
+        setLayout(new BorderLayout());
         setResizable(false);
 
-        MineSweeperBoard board = new MineSweeperBoard(20,10);
+        MineSweeperBoard board = new MineSweeperBoard(10,20);
         add(board);
 
-
-        //set main to visible
         setVisible(true);
     }
 

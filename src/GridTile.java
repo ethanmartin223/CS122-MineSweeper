@@ -31,23 +31,28 @@ public class GridTile extends JButton {
 
     public GridTile(int pX, int pY, MineSweeperBoard parent) {
         super();
-        addActionListener(this::onClick);
         x = pX;
         y = pY;
         parentBoard = parent;
         setBackground((x+y)%2==0?Color.LIGHT_GRAY:Color.GRAY);
-        setBorder(null);
         setBorderPainted(false);
         setFocusPainted(false);
+        setBorder(BorderFactory.createEmptyBorder());
         isFlagged = false;
         this.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
                 onRightClick(e);
+                onClick(e);
+                parentBoard.checkForWin();
             }
         });
     }
 
     public void setIsAMine(boolean v) {isAMine = v;}
+
+    public boolean isRevealed() {
+        return isRevealed;
+    }
 
     public void resetTile() {
         setEnabled(true);
@@ -70,25 +75,31 @@ public class GridTile extends JButton {
     }
 
     private void reveal() {
-        setBackground(isAMine?Color.RED:Color.GREEN);
-        if (isAMine) setText("*");
-        else setText(""+((numberOfMinesAround>0)?numberOfMinesAround:""));
-        isRevealed = true;
-        isFlagged = false;
-        setForeground(numberColorMap.get((int)numberOfMinesAround));
-        //setEnabled(false);
+        if (!isRevealed) {
+            setBackground(isAMine ? Color.RED : Color.GREEN);
+            setBorder(null);
+            if (isAMine) setText("*");
+            else setText("" + ((numberOfMinesAround > 0) ? numberOfMinesAround : ""));
+            isRevealed = true;
+            isFlagged = false;
+            setForeground(numberColorMap.get((int) numberOfMinesAround));
+            //setEnabled(false);
+
+        }
     }
 
-    private void onClick() {
-        onClick(null);
+    private void onClick(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            recurse();
+        }
     }
 
-    private void onClick(ActionEvent e) {
+    private void recurse() {
         if (!isFlagged && parentBoard.isFirstMove()) {
             isAMine = false;
             for (byte[] p : SURROUNDINGS) {
                 GridTile tile = parentBoard.getGridTileAt(x + p[0], y + p[1]);
-                if (tile!=null && tile.isAMine) tile.isAMine = false;
+                if (tile != null && tile.isAMine) tile.isAMine = false;
             }
             parentBoard.calculateAllTilesMineCount();
         }
@@ -99,7 +110,7 @@ public class GridTile extends JButton {
                     GridTile tile = parentBoard.getGridTileAt(x + p[0], y + p[1]);
                     if (tile != null) {
                         if (tile.numberOfMinesAround == 0) {
-                            tile.onClick();
+                            tile.recurse();
                         } else tile.reveal();
                     }
                 }
