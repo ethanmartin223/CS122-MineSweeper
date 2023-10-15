@@ -11,7 +11,7 @@ public class MainWindow extends JFrame {
         setLayout(new BorderLayout());
         setResizable(false);
 
-        MineSweeperBoard board = new MineSweeperBoard(10,20);
+        MineSweeperBoard board = new MineSweeperBoard(20,20);
         add(board);
 
         setVisible(true);

@@ -83,8 +83,6 @@ public class GridTile extends JButton {
             isRevealed = true;
             isFlagged = false;
             setForeground(numberColorMap.get((int) numberOfMinesAround));
-            //setEnabled(false);
-
         }
     }
 
@@ -95,11 +93,16 @@ public class GridTile extends JButton {
     }
 
     private void recurse() {
+        //This double checks to make set the first tile revealed to be not a mine,
+        // and that it always reveals a 3x3 around the first click.
         if (!isFlagged && parentBoard.isFirstMove()) {
             isAMine = false;
             for (byte[] p : SURROUNDINGS) {
                 GridTile tile = parentBoard.getGridTileAt(x + p[0], y + p[1]);
-                if (tile != null && tile.isAMine) tile.isAMine = false;
+                if (tile != null && tile.isAMine) {
+                    tile.isAMine = false;
+                    parentBoard.mineCount--;
+                }
             }
             parentBoard.calculateAllTilesMineCount();
         }

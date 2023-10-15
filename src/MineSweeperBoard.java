@@ -7,7 +7,7 @@ public class MineSweeperBoard extends JPanel {
     private int gridSize;
     private int mineFrequency;
     private boolean isFirstMove;
-    private int mineCount;
+    public int mineCount;
 
     public MineSweeperBoard(int gridSize, int minePercentage) {
         setLayout(new GridLayout(gridSize, gridSize));
